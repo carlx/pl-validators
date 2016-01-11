@@ -33,13 +33,10 @@ gulp.task('html', ['inject'], function () {
     addRootSlash: false
   };
 
-  var htmlFilter = $.filter('*.html', { restore: true });
   var jsFilter = $.filter('**/*.js', { restore: true });
-  var cssFilter = $.filter('**/*.css', { restore: true });
   var assets;
 
   return gulp.src(path.join(conf.paths.tmp, '/serve/*.html'))
-    //.pipe($.inject(partialsInjectFile, partialsInjectOptions))
     .pipe(assets = $.useref.assets())
     .pipe($.rev())
     .pipe(jsFilter)
@@ -47,23 +44,6 @@ gulp.task('html', ['inject'], function () {
     .pipe($.ngAnnotate())
     .pipe($.uglify({ preserveComments: $.uglifySaveLicense })).on('error', conf.errorHandler('Uglify'))
     .pipe($.sourcemaps.write('maps'))
-    //.pipe(jsFilter.restore)
-    //.pipe(cssFilter)
-    //.pipe($.sourcemaps.init())
-    //.pipe($.minifyCss({ processImport: false }))
-    //.pipe($.sourcemaps.write('maps'))
-    //.pipe(cssFilter.restore)
-    //.pipe(assets.restore())
-    //.pipe($.useref())
-    //.pipe($.revReplace())
-    //.pipe(htmlFilter)
-    //.pipe($.minifyHtml({
-    //  empty: true,
-    //  spare: true,
-    //  quotes: true,
-    //  conditionals: true
-    //}))
-    //.pipe(htmlFilter.restore)
     .pipe(gulp.dest(path.join(conf.paths.dist, '/')))
     .pipe($.size({ title: path.join(conf.paths.dist, '/'), showFiles: true }));
   });
