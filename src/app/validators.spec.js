@@ -1,7 +1,7 @@
 (function() {
   'use strict';
 
-  describe('directive pesel', function() {
+  describe('directive validate pesel', function() {
     var $log;
     var vm;
     var el;
@@ -51,4 +51,111 @@
     });
 
   });
+
+
+  describe('directive validate id document', function() {
+    var $log;
+    var vm;
+    var el;
+    var $scope, form;
+
+    beforeEach(module('validators'));
+    beforeEach(inject(function($compile, $rootScope, $q, _$log_) {
+      $log = _$log_;
+      $scope = $rootScope;
+      el = angular.element('<form name="form">' +
+          '<input ng-model="docId" name="docId" validate-id-number />' +
+          '</form>');
+      $scope.model = { docId: null };
+      $compile(el)($scope);
+      $scope.$digest();
+      form = $scope.form;
+    }));
+
+    it('should be compiled', function() {
+      expect(el.html()).not.toEqual(null);
+    });
+
+    it('should be invalid', function() {
+      var idArr = [
+        '81030712149',
+        '81061507246',
+        '81114718377'
+      ];
+      angular.forEach(idArr, function(element) {
+        form.docId.$setViewValue(element);
+        expect($scope.docId).toEqual(element);
+        expect(form.docId.$valid).toBe(false);
+      });
+    });
+
+    it('should be valid', function() {
+      var idArr = [
+        'AHB902100',
+        'AHB902100',
+        'AHB902100'
+      ];
+      angular.forEach(idArr, function(element) {
+        form.docId.$setViewValue(element);
+        expect($scope.docId).toEqual(element);
+        expect(form.docId.$valid).toBe(true);
+      });
+    });
+
+  });
+
+
+  describe('directive validate nip number', function() {
+    var $log;
+    var vm;
+    var el;
+    var $scope, form;
+
+    beforeEach(module('validators'));
+
+    beforeEach(inject(function($compile, $rootScope, $q, _$log_) {
+      $log = _$log_;
+      $scope = $rootScope;
+      el = angular.element('<form name="form">' +
+          '<input ng-model="vatNum" name="vatNum" validate-nip-number />' +
+          '</form>');
+      $scope.model = { vatNum: null };
+      $compile(el)($scope);
+      $scope.$digest();
+      form = $scope.form;
+    }));
+
+    it('should be compiled', function() {
+      expect(el.html()).not.toEqual(null);
+    });
+
+    it('should be invalid', function() {
+      var vatNumArr = [
+        '233140518',
+        '23406518',
+        '233940651'
+      ];
+      angular.forEach(vatNumArr, function(element) {
+        form.vatNum.$setViewValue(element);
+        expect($scope.vatNum).toEqual(element);
+        expect(form.vatNum.$valid).toBe(false);
+      });
+    });
+
+    it('should be valid', function() {
+      var vatNumArr = [
+        '2331406518',
+        '2331406518',
+        '2331406518'
+      ];
+      angular.forEach(vatNumArr, function(element) {
+        form.vatNum.$setViewValue(element);
+        expect($scope.vatNum).toEqual(element);
+        expect(form.vatNum.$valid).toBe(true);
+      });
+    });
+
+  });
+
+
 })();
